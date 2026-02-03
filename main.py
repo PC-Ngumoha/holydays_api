@@ -9,7 +9,7 @@ in the specific country of interest.
 """
 from fastapi import FastAPI
 from dotenv import load_dotenv
-from freeflow_llm import FreeFlowClient
+from freeflow_llm import FreeFlowClient, RateLimitError
 
 load_dotenv()
 
@@ -26,11 +26,16 @@ async def get_description(country_name: str, holiday_name: str):
     how {holiday_name} is observed in {country_name}, focusing on traditions, public activities,
     and the general atmosphere, using a friendly, neutral tone and avoiding politics.'''
 
-    with FreeFlowClient() as client:
-        response = client.chat(
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
+    try:
+        with FreeFlowClient() as client:
+            response = client.chat(
+                messages=[
+                    {"role": "user", "content": prompt}
+                ]
+            )
 
         return {"Response": response.content}
+    except RateLimitError:
+        return {"Error": "You've exceeded the limits of this resource."}
+    except Exception:
+        return {"Error": "Oops! something failed. Please try again"}
