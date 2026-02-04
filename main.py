@@ -7,12 +7,17 @@ in the specific country of interest.
 
 
 """
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 from freeflow_llm import FreeFlowClient, RateLimitError
+import os
+import requests
 
 load_dotenv()
+
+# print(f"Unsplash Access Key: {os.environ.get("UNSPLASH_ACCESS_KEY")}")
+# print(f"Unsplash Secret Key: {os.environ.get("UNSPLASH_SECRET_KEY")}")
 
 app = FastAPI()
 
@@ -53,3 +58,7 @@ async def get_description(country_name: str, holiday_name: str):
         return {"Error": "You've exceeded the limits of this resource."}
     except Exception:
         return {"Error": "Oops! something failed. Please try again"}
+
+@app.get('/image/')
+async def get_descriptive_image():
+    pass
