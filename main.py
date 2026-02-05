@@ -59,6 +59,27 @@ async def get_description(country_name: str, holiday_name: str):
     except Exception:
         return {"Error": "Oops! something failed. Please try again"}
 
-@app.get('/image/')
-async def get_descriptive_image():
-    pass
+@app.get('/image/countries/{country_name}/holidays/{holiday_name}')
+async def get_descriptive_image(country_name: str, holiday_name: str):
+    headers = {
+        'Authorization': f'Client-ID {os.environ.get('UNSPLASH_ACCESS_KEY')}',
+        'Accept-Version': 'v1',
+    }
+
+    params = {
+        'query': f'{holiday_name} in {country_name}',
+        'per_page': 1,
+        'orientation': 'landscape',
+        'fm': 'webp'
+    }
+
+    URL = 'https://api.unsplash.com/search/photos'
+
+    try:
+        response = requests.get(URL, headers=headers, params=params)
+        data = response.json()
+
+        return data
+    except Exception:
+        return {"Error": "An error occurred !!!"}
+
