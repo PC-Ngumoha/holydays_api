@@ -16,9 +16,6 @@ import requests
 
 load_dotenv()
 
-# print(f"Unsplash Access Key: {os.environ.get("UNSPLASH_ACCESS_KEY")}")
-# print(f"Unsplash Secret Key: {os.environ.get("UNSPLASH_SECRET_KEY")}")
-
 app = FastAPI()
 
 origins = [
