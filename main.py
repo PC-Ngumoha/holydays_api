@@ -66,8 +66,11 @@ async def get_descriptive_image(country_name: str, holiday_name: str):
         'Accept-Version': 'v1',
     }
 
+    holiday = f'{holiday_name} day' if 'day' not in holiday_name.lower() else holiday_name
+    # print(holiday)
+
     params = {
-        'query': f'{holiday_name} in {country_name}',
+        'query': f'{holiday} in {country_name}',
         'per_page': 1,
         'orientation': 'landscape',
         'fm': 'webp'
